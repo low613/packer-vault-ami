@@ -19,8 +19,13 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ap-southeast-2
+      - name: Packer init
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
+          target: .
       - name: Build Packer Image
         uses: hashicorp/packer-github-actions@master
         with:
           command: build
-          target: aws-ubuntu-2204-vault.pkr.hcl
+          target: .
