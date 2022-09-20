@@ -1,10 +1,12 @@
-cluster_addr = "http://HOSTNAME:8201"
-api_addr = "http://HOSTNAME:8200"
+cluster_addr = "https://HOSTNAME:8201"
+api_addr = "https://HOSTNAME:8200"
 disable_mlock = true
 ui = true
 listener "tcp" {
     address = "0.0.0.0:8200"
-    tls_disable = true
+    tls_cert_file      = "/opt/vault/tls/vault-cert.pem"
+    tls_key_file       = "/opt/vault/tls/vault-key.pem"
+    tls_client_ca_file = "/opt/vault/tls/vault-ca.pem"
 }
 
 storage "raft" {
@@ -13,7 +15,11 @@ storage "raft" {
 
   retry_join {
     auto_join               = "provider=aws region=AWS_REGION tag_key=vault tag_value=server"
-    auto_join_scheme        = "http"
+    auto_join_scheme        = "https"
+    leader_tls_servername   = "vault.local"
+    leader_ca_cert_file     = "/opt/vault/tls/vault-ca.pem"
+    leader_client_cert_file = "/opt/vault/tls/vault-cert.pem"
+    leader_client_key_file  = "/opt/vault/tls/vault-key.pem"
   }
 }
 
